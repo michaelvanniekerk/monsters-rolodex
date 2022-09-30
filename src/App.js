@@ -1,5 +1,7 @@
 import "./App.css";
 import { Component } from "react";
+import CardList from "./components/card-list/card-list.component";
+import SearchBox from "./components/search-box/search-box.component";
 
 class App extends Component {
   constructor() {
@@ -9,53 +11,49 @@ class App extends Component {
       monsters: [],
       filter: "",
     };
-    console.log("constructor");
   }
 
+  setFilter = (event) => {
+    this.setState(() => {
+      return { filter: event.target.value.toLocaleLowerCase() };
+    });
+  };
+
   componentDidMount() {
-    console.log("mount");
     fetch("https://jsonplaceholder.typicode.com/users").then((response) =>
       response.json().then((users) =>
         this.setState(
           () => {
             return { monsters: users };
           },
-          () => {
-            console.log(this.state);
-          }
+          () => {}
         )
       )
     );
   }
 
-  onFilterChange = (event) => {
-    this.setState(() => ({
-      filter: event.target.value.toLocaleLowerCase(),
-    }));
-  };
-
   render() {
-    console.log("render");
-
+    const { setFilter } = this;
     const { monsters, filter } = this.state;
-    const { onFilterChange } = this;
+
+    const filteredMonsters = monsters.filter((m) =>
+      m.name.toLocaleLowerCase().includes(filter)
+    );
 
     return (
       <div className="App">
-        <input
+        <h1 className="app-title">Monsters :-|</h1>
+        <SearchBox
+          onChangeHandler={setFilter}
+          placeholder="Search Monsters"
           className="search-box"
-          type="search"
-          placeholder="search monsters"
-          onChange={onFilterChange}
         />
-
-        {monsters
-          .filter((monster) =>
-            monster.name.toLocaleLowerCase().includes(filter)
-          )
-          .map((monster) => {
-            return <h1 key={monster.id}>{monster.name}</h1>;
-          })}
+        <CardList monsters={filteredMonsters} />
+        <div>
+          <div className="candidate-placed">a</div>
+          <div className="candidate-placed">b</div>
+          <div>c</div>
+        </div>
       </div>
     );
   }
