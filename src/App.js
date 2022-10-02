@@ -49,11 +49,6 @@ class App extends Component {
           className="search-box"
         />
         <CardList monsters={filteredMonsters} />
-        <div>
-          <div className="candidate-placed">a</div>
-          <div className="candidate-placed">b</div>
-          <div>c</div>
-        </div>
       </div>
     );
   }
